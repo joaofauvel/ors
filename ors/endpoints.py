@@ -59,7 +59,6 @@ def isochrones(
 
     def call(http: HTTPClient, ctx: Context) -> GeoJSON:
         url = _prepare_isoch_url(ctx.base_url, Endpoints.ISOCHRONES, ctx.profile)
-        print(url)
         resp = http.request(
             "POST",
             url,
