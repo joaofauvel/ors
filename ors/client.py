@@ -1,7 +1,9 @@
 from dataclasses import asdict
 from typing import Callable
-from ors.types import Endpoint, HTTPClient, Response, Context, default_headers
+
 from urllib3 import PoolManager
+
+from ors.types import Context, Endpoint, HTTPClient, Response, default_headers
 
 
 def context(

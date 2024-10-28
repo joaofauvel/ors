@@ -1,11 +1,14 @@
-from enum import StrEnum
 import json
 from collections.abc import Iterable
+from enum import StrEnum
 from typing import Any, Callable
-from ors.types import HTTPClient, Context, GeoJSON
-
-
 from urllib.parse import urljoin
+
+from ors.types import Context, GeoJSON, HTTPClient
+
+
+def _prepare_headers(headers: dict[str, Any]) -> dict[str, Any]:
+    return {k: v for k, v in headers.items() if v is not None}
 
 
 class Endpoints(StrEnum):
@@ -56,11 +59,12 @@ def isochrones(
 
     def call(http: HTTPClient, ctx: Context) -> GeoJSON:
         url = _prepare_isoch_url(ctx.base_url, Endpoints.ISOCHRONES, ctx.profile)
+        print(url)
         resp = http.request(
             "POST",
             url,
             body=_prepare_isoch_body(body),
-            headers=ctx.headers,
+            headers=_prepare_headers(ctx.headers),
         )
         return _parse_isoch_response(resp.data)
 

@@ -14,7 +14,7 @@ def default_headers() -> dict[str, str]:
 
 @dataclass
 class Context:
-    base_url: str = "https://api.openrouteservice.org/v2"
+    base_url: str = "https://api.openrouteservice.org/v2/"
     headers: dict[str, str] = field(default_factory=default_headers)
     profile: str = "driving-car"
 
