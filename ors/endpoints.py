@@ -2,14 +2,14 @@ from enum import StrEnum
 import json
 from collections.abc import Iterable
 from typing import Any, Callable
-from ors.types import Response, HTTPClient, Context, GeoJSON
+from ors.types import HTTPClient, Context, GeoJSON
 
 
 from urllib.parse import urljoin
 
 
 class Endpoints(StrEnum):
-    ISOCHRONES = "/v2/isochrones"
+    ISOCHRONES = "isochrones"
 
 
 def _prepare_isoch_url(base: str, endpoint: str, profile: str) -> str:
@@ -17,7 +17,7 @@ def _prepare_isoch_url(base: str, endpoint: str, profile: str) -> str:
     return urljoin(base=base, url=ep)
 
 
-def _parse_isoch_response(resp: str) -> Response:
+def _parse_isoch_response(resp: str) -> GeoJSON:
     return json.loads(resp)
 
 

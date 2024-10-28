@@ -5,7 +5,7 @@ from urllib3 import PoolManager
 
 
 def context(
-    base_url: str = "https://api.openrouteservice.org/v2",
+    base_url: str = "https://api.openrouteservice.org/v2/",
     auth: str | None = None,
     profile: str = "driving-car",
 ) -> Context:
