@@ -26,6 +26,10 @@ class Context:
     headers: dict[str, str] = field(default_factory=default_headers)
     endpoints: EndpointsEnum = Endpoints
 
+    def __post_init__(self):
+        if self.base_url[-1] != "/":
+            self.base_url = self.base_url + "/"
+
 
 def context(
     base_url: str = "https://api.openrouteservice.org/v2/",
