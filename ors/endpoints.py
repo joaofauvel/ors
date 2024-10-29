@@ -4,9 +4,9 @@ from enum import StrEnum
 from typing import Any, Callable
 from urllib.parse import urljoin
 
-from urllib3.exceptions import HTTPError
+import urllib3
 
-from ors.exceptions import FailedRequest
+from ors.exceptions import FailedRequest, HTTPError
 from ors.types import Context, GeoJSON, HTTPClient
 
 
@@ -69,8 +69,8 @@ def isochrones(
                 body=_prepare_isoch_body(body),
                 headers=_prepare_headers(ctx.headers),
             )
-        except HTTPError as e:
-            raise FailedRequest(f"request failed on isochrones endpoint: {e}")
+        except urllib3.exceptions.HTTPError as e:
+            raise HTTPError(f"request failed on isochrones endpoint: {e}")
         if resp.status != 200:
             raise FailedRequest("request returned a failed status")
         return _parse_isoch_response(resp.data)
