@@ -68,7 +68,7 @@ def isochrones(
         except urllib3.exceptions.HTTPError as e:
             raise HTTPError(f"request failed on isochrones endpoint: {e}")
         if resp.status != 200:
-            raise FailedRequest("request returned a failed status")
+            raise FailedRequest(f"request returned a failed status: {resp.status} with message {resp.data}")
         return _parse_isoch_response(resp.data)
 
     return call
@@ -85,7 +85,7 @@ def health() -> Callable[[HTTPClient, Context], JSON]:
         except urllib3.exceptions.HTTPError as e:
             raise HTTPError(f"request failed on health endpoint: {e}")
         if resp.status != 200:
-            raise FailedRequest("request returned a failed status")
+            raise FailedRequest(f"request returned a failed status: {resp.status} with message {resp.data}")
         return json.loads(resp.data)
 
     return call
