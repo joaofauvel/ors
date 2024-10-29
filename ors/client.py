@@ -52,6 +52,6 @@ def client(
     def _(
         endpoint: Endpoint,
     ) -> Response:
-        return endpoint(http, ctx, endpoints)
+        return endpoint(http, ctx)
 
     return _
