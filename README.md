@@ -8,7 +8,7 @@ Simple [openrouteservice](https://openrouteservice.org/) client.
 ```python
 >>> import ors
 
->>> ctx = ors.context(auth="API-KEY")
+>>> ctx = ors.context(api_key="API-KEY")
 >>> client = ors.client(ctx)
 
 >>> client(
