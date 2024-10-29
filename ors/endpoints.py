@@ -83,9 +83,9 @@ def health() -> Callable[[HTTPClient, Context], JSON]:
                 url,
             )
         except urllib3.exceptions.HTTPError as e:
-            raise HTTPError(f"request failed on health endpoint: {e}")
+            raise HTTPError(f"request failed: {e} when accessing {url}")
         if resp.status != 200:
-            raise FailedRequest(f"request returned a failed status: {resp.status} with message {resp.data}")
+            raise FailedRequest(f"request on {url} returned a failed status: {resp.status} with message {resp.data}")
         return json.loads(resp.data)
 
     return call

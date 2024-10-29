@@ -47,7 +47,6 @@ Endpoint = Callable[[HTTPClient, Context], Response]
 def client(
     ctx: Context = context(),
     http: HTTPClient = PoolManager(),
-    endpoints: EndpointsEnum = Endpoints,
 ) -> Callable[[Endpoint], Response]:
     def _(
         endpoint: Endpoint,
