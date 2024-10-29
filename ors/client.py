@@ -9,11 +9,10 @@ from ors.types import Context, Endpoint, HTTPClient, Response, default_headers
 def context(
     base_url: str = "https://api.openrouteservice.org/v2/",
     auth: str | None = None,
-    profile: str = "driving-car",
 ) -> Context:
     headers = default_headers()
     headers["Authorization"] = auth
-    return Context(base_url, headers, profile)
+    return Context(base_url, headers)
 
 
 def client(
