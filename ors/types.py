@@ -12,8 +12,8 @@ def default_headers() -> dict[str, str]:
     return d
 
 
-@dataclass
-class Context(frozen=True):
+@dataclass(frozen=True)
+class Context:
     base_url: str = "https://api.openrouteservice.org/v2/"
     headers: dict[str, str] = field(default_factory=default_headers)
 
