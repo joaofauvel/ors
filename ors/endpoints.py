@@ -6,6 +6,7 @@ from urllib.parse import urljoin
 
 from urllib3.exceptions import HTTPError
 
+from ors.exceptions import FailedRequest
 from ors.types import Context, GeoJSON, HTTPClient
 
 
@@ -69,9 +70,9 @@ def isochrones(
                 headers=_prepare_headers(ctx.headers),
             )
         except HTTPError as e:
-            raise Exception(f"request failed on isochrones endpoint: {e}")
+            raise FailedRequest(f"request failed on isochrones endpoint: {e}")
         if resp.status != 200:
-            raise Exception("request returned a failed status")
+            raise FailedRequest("request returned a failed status")
         return _parse_isoch_response(resp.data)
 
     return call
