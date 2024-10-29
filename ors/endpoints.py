@@ -1,21 +1,16 @@
 import json
 from collections.abc import Iterable
-from enum import StrEnum
 from typing import Any, Callable
 from urllib.parse import urljoin
 
 import urllib3
 
+from ors.client import JSON, Context, GeoJSON, HTTPClient
 from ors.exceptions import FailedRequest, HTTPError
-from ors.types import Context, GeoJSON, HTTPClient
 
 
 def _prepare_headers(headers: dict[str, Any]) -> dict[str, Any]:
     return {k: v for k, v in headers.items() if v is not None}
-
-
-class Endpoints(StrEnum):
-    ISOCHRONES = "isochrones"
 
 
 def _prepare_isoch_url(base: str, endpoint: str, profile: str) -> str:
@@ -62,7 +57,7 @@ def isochrones(
     }
 
     def call(http: HTTPClient, ctx: Context) -> GeoJSON:
-        url = _prepare_isoch_url(ctx.base_url, Endpoints.ISOCHRONES, profile)
+        url = _prepare_isoch_url(ctx.base_url, ctx.endpoints.ISOCHRONES, profile)
         try:
             resp = http.request(
                 "POST",
@@ -75,5 +70,22 @@ def isochrones(
         if resp.status != 200:
             raise FailedRequest("request returned a failed status")
         return _parse_isoch_response(resp.data)
+
+    return call
+
+
+def health() -> Callable[[HTTPClient, Context], JSON]:
+    def call(http: HTTPClient, ctx: Context) -> JSON:
+        url = urljoin(base=ctx.base_url, url=ctx.endpoints.HEALTH)
+        try:
+            resp = http.request(
+                "GET",
+                url,
+            )
+        except urllib3.exceptions.HTTPError as e:
+            raise HTTPError(f"request failed on health endpoint: {e}")
+        if resp.status != 200:
+            raise FailedRequest("request returned a failed status")
+        return json.loads(resp.data)
 
     return call
