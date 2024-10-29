@@ -44,6 +44,7 @@ def isochrones(
     smoothing: int | None = None,
     area_units: str | None = None,
     units: str | None = None,
+    profile: str = "driving-car",
 ) -> Callable[[HTTPClient, Context], GeoJSON]:
     body = {
         "locations": locations,
@@ -61,7 +62,7 @@ def isochrones(
     }
 
     def call(http: HTTPClient, ctx: Context) -> GeoJSON:
-        url = _prepare_isoch_url(ctx.base_url, Endpoints.ISOCHRONES, ctx.profile)
+        url = _prepare_isoch_url(ctx.base_url, Endpoints.ISOCHRONES, profile)
         try:
             resp = http.request(
                 "POST",
