@@ -26,16 +26,14 @@ class Context:
     headers: dict[str, str] = field(default_factory=default_headers)
     endpoints: EndpointsEnum = Endpoints
 
-    def __post_init__(self):
-        if self.base_url[-1] != "/":
-            self.base_url = self.base_url + "/"
-
 
 def context(
     base_url: str = "https://api.openrouteservice.org/v2/",
     api_key: str | None = None,
     endpoints: EndpointsEnum = Endpoints,
 ) -> Context:
+    if base_url[-1] != "/":
+        base_url = base_url + "/"
     headers = default_headers()
     headers["Authorization"] = api_key
     return Context(base_url, headers, endpoints)
