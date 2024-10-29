@@ -4,6 +4,8 @@ from enum import StrEnum
 from typing import Any, Callable
 from urllib.parse import urljoin
 
+from urllib3.exceptions import HTTPError
+
 from ors.types import Context, GeoJSON, HTTPClient
 
 
@@ -59,12 +61,17 @@ def isochrones(
 
     def call(http: HTTPClient, ctx: Context) -> GeoJSON:
         url = _prepare_isoch_url(ctx.base_url, Endpoints.ISOCHRONES, ctx.profile)
-        resp = http.request(
-            "POST",
-            url,
-            body=_prepare_isoch_body(body),
-            headers=_prepare_headers(ctx.headers),
-        )
+        try:
+            resp = http.request(
+                "POST",
+                url,
+                body=_prepare_isoch_body(body),
+                headers=_prepare_headers(ctx.headers),
+            )
+        except HTTPError as e:
+            raise Exception(f"request failed on isochrones endpoint: {e}")
+        if resp.status != 200:
+            raise Exception("request returned a failed status")
         return _parse_isoch_response(resp.data)
 
     return call
